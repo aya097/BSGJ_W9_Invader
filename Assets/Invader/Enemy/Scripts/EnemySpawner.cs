@@ -13,10 +13,12 @@ namespace Invader.Enemy
         readonly IEnemyCluster _enemyCluster;   // 作成したEnemyMonoを集約する
         readonly GameObject _enemyMonoPrefab;   // EnemyMonoのPrefabを受け取る
 
-        EnemySpawner(GameObject enemyMonoPrefab)
+        public EnemySpawner(GameObject enemyMonoPrefab, EnemyCluster enemyCluster)
         {
             _enemyMonoPrefab = enemyMonoPrefab;
-            _enemyCluster = new EnemyCluster();
+            _enemyCluster = enemyCluster;
+
+            SpawnEnemy(new Vector3(0, 0));  // 仮生成
         }
 
         void SpawnEnemy(Vector3 position)
