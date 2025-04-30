@@ -66,5 +66,8 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj",
     },
-    "dotnet.defaultSolution": "BSGJ_W9_Invader.sln"
+    "dotnet.defaultSolution": "BSGJ_W9_Invader.sln",
+    "cSpell.words": [
+        "Scriptable"
+    ]
 }
