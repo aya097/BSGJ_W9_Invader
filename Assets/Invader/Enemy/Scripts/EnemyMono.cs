@@ -20,7 +20,7 @@ namespace Invader.Enemy
         public void Move(Vector2 moveAmount)
         {
             Vector3 amount = new Vector3(moveAmount.x, moveAmount.y, 0);
-            transform.Translate(moveAmount);
+            transform.Translate(amount);
         }
         public void OnHit()
         {
