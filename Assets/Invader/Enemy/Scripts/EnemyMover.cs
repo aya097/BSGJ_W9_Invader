@@ -1,6 +1,8 @@
 #nullable enable
 using UnityEngine;
 using System.Linq;
+using Invader.Utility;
+using Unity.Burst.Intrinsics;
 
 namespace Invader.Enemy
 {
@@ -74,6 +76,16 @@ namespace Invader.Enemy
             float leftPositionX = orderedEnemies.FirstOrDefault().GetPosition().x;  // もっとも左の座標
             float rightPositionX = orderedEnemies.LastOrDefault().GetPosition().x;  // もっとも右の座標
 
+            if (moveState == EnemyMoveState.Right)
+            {
+                var rightEdge = ScreenInfo.GetPositionByScreen(new Vector2(1, 0));
+                return rightPositionX > rightEdge.x;
+            }
+            else if (moveState == EnemyMoveState.Left)
+            {
+                var leftEdge = ScreenInfo.GetPositionByScreen(new Vector2(0, 0));
+                return leftPositionX < leftEdge.x;
+            }
 
             return false;
         }
