@@ -10,18 +10,15 @@ namespace Invader.Enemy
     /// </summary>
     public class EnemySpawner
     {
-        const int _rowNum = 4;
-        const int _columnNum = 8;
-        readonly Vector2 _distance = new Vector2(1.5f, 1.5f);
-        readonly Vector2 _leftTop = new Vector2(-6f, 4f);
-
         readonly IEnemyCluster _enemyCluster;   // 作成したEnemyMonoを集約する
+        readonly EnemyParamServer _enemyParamServer;
 
 
-        public EnemySpawner(GameObject enemyMonoPrefab, EnemyCluster enemyCluster)
+        public EnemySpawner(EnemyParamServer enemyParamServer, GameObject enemyMonoPrefab, EnemyCluster enemyCluster)
         {
+            _enemyParamServer = enemyParamServer;
             _enemyCluster = enemyCluster;
-            SpawnEnemyArranged(enemyMonoPrefab, _leftTop, _rowNum, _columnNum, _distance);
+            SpawnEnemyArranged(enemyMonoPrefab, _enemyParamServer.GetLeftTop(), _enemyParamServer.GetRowNum(), _enemyParamServer.GetColumnNum(), _enemyParamServer.GetDistance());
         }
 
         void SpawnEnemyArranged(GameObject enemyMonoPrefab, Vector2 leftTopPosition, int rowNum, int columnNum, Vector2 distance)

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ecb49e23e2fe444c9f850e6cc6f7f2a, type: 3}
   m_Name: Sample1
   m_EditorClassIdentifier: 
-  rowNum: 0
-  columnNum: 0
-  distance: {x: 0, y: 0}
-  leftTop: {x: 0, y: 0}
+  rowNum: 4
+  columnNum: 8
+  distance: {x: 1.5, y: 1.5}
+  leftTop: {x: -6, y: 4}

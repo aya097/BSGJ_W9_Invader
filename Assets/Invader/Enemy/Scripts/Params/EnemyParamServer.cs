@@ -1,4 +1,6 @@
 #nullable enable
+using UnityEngine;
+
 namespace Invader.Enemy
 {
     /// <summary>
@@ -11,6 +13,26 @@ namespace Invader.Enemy
         public EnemyParamServer(EnemySpawnerParam enemySpawnerParam)
         {
             _enemySpawnerParam = enemySpawnerParam;
+        }
+
+        public int GetRowNum()
+        {
+            return _enemySpawnerParam.rowNum;
+        }
+
+        public int GetColumnNum()
+        {
+            return _enemySpawnerParam.columnNum;
+        }
+
+        public Vector2 GetDistance()
+        {
+            return _enemySpawnerParam.distance;
+        }
+
+        public Vector2 GetLeftTop()
+        {
+            return _enemySpawnerParam.leftTop;
         }
     }
 }
