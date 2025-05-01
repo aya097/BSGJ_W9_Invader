@@ -9,13 +9,16 @@ namespace Invader.Enemy
     public class EnemyEntryPointMono : MonoBehaviour
     {
         [SerializeField] GameObject enemyMonoPrefab = null!;
+        [SerializeField] EnemySpawnerParam enemySpawnerParam = null!;
 
         private EnemySpawner _enemySpawner = null!;
         private EnemyCluster _enemyCluster = null!;
+        private EnemyParamServer _enemyParamServer = null!;
         void Awake()
         {
             _enemyCluster = new EnemyCluster();
-            _enemySpawner = new EnemySpawner(enemyMonoPrefab, _enemyCluster);
+            _enemyParamServer = new EnemyParamServer(enemySpawnerParam);
+            _enemySpawner = new EnemySpawner(_enemyParamServer, enemyMonoPrefab, _enemyCluster);
         }
     }
 }
