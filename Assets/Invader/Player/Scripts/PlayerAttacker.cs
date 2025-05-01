@@ -1,4 +1,5 @@
 # nullable enable
+using Invader.Bullet;
 using UnityEngine;
 
 namespace Invader.Player
@@ -8,8 +9,14 @@ namespace Invader.Player
     /// </summary>
     public class PlayerAttacker
     {
-        public void Attack()
+        public void Attack(BulletSpawner bulletSpawner)//()の中を追加
         {
+            if (bulletSpawner != null)//追加
+            {
+                bulletSpawner.Spawn();
+
+            }//追加
+
             Debug.Log("Player is attacking!");  // 仮の攻撃処理
         }
     }
