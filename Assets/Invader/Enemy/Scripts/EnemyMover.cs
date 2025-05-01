@@ -2,7 +2,10 @@
 using UnityEngine;
 using System.Linq;
 using Invader.Utility;
-using Unity.Burst.Intrinsics;
+using System;
+using Unity.VisualScripting;
+using System.Collections.Generic;
+using UnityEngine.UIElements;
 
 namespace Invader.Enemy
 {
@@ -14,22 +17,53 @@ namespace Invader.Enemy
         Forward,    // 前進
     }
 
+    // Enemyの座標のラッパー
+    class EnemiesPosition
+    {
+        private Vector2 _position;
+
+        public EnemiesPosition(Vector2 init)
+        {
+            _position = init;
+        }
+
+        public Vector2 Get()
+        {
+            return _position;
+        }
+
+        public void Move(Vector2 moveAmount, IEnumerable<IEnemyMono> enemies)
+        {
+            _position += moveAmount;    // 座標を更新
+            foreach (var enemy in enemies)
+            {
+                enemy.Move(moveAmount);
+            }
+        }
+    }
+
+
     /// <summary>
     /// Enemy全体の動きに関するクラス
     /// </summary>
     public class EnemyMover
     {
-        const float _speed = 5;
+        const float _speed = 3;
+        const float _movingForwardAmount = 0.5f;
 
-        private EnemyMoveState _currentMoveState;
+        private EnemyMoveState _currentMoveState;   // 現在の移動状態
+
+        private Func<Vector2, bool> _isForwardFinished = (vec) => { return true; };    // 前進が終了するか確認する
+        private Action? _onForwardFinished;  // 前進が終了した時のコールバック
         readonly IEnemyCluster _enemyCluster;
+        readonly EnemiesPosition _enemiesPosition;
 
         public EnemyMover(IEnemyCluster enemyCluster)
         {
             _currentMoveState = EnemyMoveState.Right;    // 最初は右移動
             _enemyCluster = enemyCluster;
+            _enemiesPosition = new(Vector2.zero);
         }
-
 
         public void Move(float deltaTime)
         {
@@ -39,13 +73,24 @@ namespace Invader.Enemy
                 // 端に到達したら
                 if (IsReachEdge(_currentMoveState))
                 {
-                    _currentMoveState = GetFlippedLR(_currentMoveState);    // 左右反転
+                    ChangeMoveStateForward();   // 前進処理に変更
                 }
-                Vector2 moveAmount = GetDirection(_currentMoveState) * _speed * deltaTime;
-                MoveAll(moveAmount);
             }
+            // 前進の場合
+            if (_currentMoveState == EnemyMoveState.Forward)
+            {
+                // 終了していれば終了処理
+                if (_isForwardFinished.Invoke(_enemiesPosition.Get()))
+                {
+                    _onForwardFinished?.Invoke();
+                }
+            }
+
+            Vector2 moveAmount = GetDirection(_currentMoveState) * _speed * deltaTime;
+            _enemiesPosition.Move(moveAmount, _enemyCluster.Enemies);
         }
 
+        // 移動状態に応じて移動方向を返す
         Vector2 GetDirection(EnemyMoveState moveState)
         {
             if (moveState == EnemyMoveState.None) Debug.LogWarning($"MoveState is None");
@@ -57,12 +102,23 @@ namespace Invader.Enemy
             return Vector2.zero;
         }
 
-        void MoveAll(Vector2 moveAmount)
+        // 前進するときの処理
+        void ChangeMoveStateForward()
         {
-            foreach (var enemy in _enemyCluster.Enemies)
+            EnemyMoveState currentMoveState = _currentMoveState;    // 現在のMoveStateのバッファ
+            Vector2 targetPosition = _enemiesPosition.Get() + Vector2.down * _movingForwardAmount;
+
+            _isForwardFinished = (currentPosition) =>
             {
-                enemy.Move(moveAmount);
-            }
+                // 現在のy座標が目標座標よりも下にいればtrue
+                return currentPosition.y < targetPosition.y;
+            };
+            _onForwardFinished = () =>
+            {
+                _currentMoveState = GetFlippedLR(currentMoveState);
+            };
+
+            _currentMoveState = EnemyMoveState.Forward;
         }
 
         // MoveStateに応じて端判定を行う
