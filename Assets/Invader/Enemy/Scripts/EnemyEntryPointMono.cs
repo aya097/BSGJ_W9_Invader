@@ -14,11 +14,18 @@ namespace Invader.Enemy
         private EnemySpawner _enemySpawner = null!;
         private EnemyCluster _enemyCluster = null!;
         private EnemyParamServer _enemyParamServer = null!;
+        private EnemyMover _enemyMover = null!;
         void Awake()
         {
             _enemyCluster = new EnemyCluster();
             _enemyParamServer = new EnemyParamServer(enemySpawnerParam);
             _enemySpawner = new EnemySpawner(_enemyParamServer, enemyMonoPrefab, _enemyCluster);
+            _enemyMover = new EnemyMover(_enemyCluster);
+        }
+
+        void Update()
+        {
+            _enemyMover.Move(Time.deltaTime);
         }
     }
 }

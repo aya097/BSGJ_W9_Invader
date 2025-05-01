@@ -1,7 +1,10 @@
+using UnityEngine;
+
 namespace Invader.Enemy
 {
     public interface IEnemyMono
     {
-        // 今は特になし
+        Vector2 GetPosition();
+        void Move(Vector2 moveAmount);
     }
 }
