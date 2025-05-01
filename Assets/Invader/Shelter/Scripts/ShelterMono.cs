@@ -6,7 +6,6 @@ namespace Invader.Shelter
 {
     public class ShelterMono : MonoBehaviour, IOnHit
     {
-
         public void OnHit()
         {
             Transform[] shelterChildren = gameObject.GetComponentsInChildren<Transform>();
