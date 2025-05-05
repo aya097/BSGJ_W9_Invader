@@ -4,7 +4,7 @@ namespace Invader.Bullet
 {
     public class BulletSpawner : MonoBehaviour, IBulletSpawner
     {
-        public GameObject bulletPrefab;
+        public BulletMono bulletPrefab;
 
         public void Spawn()
         {

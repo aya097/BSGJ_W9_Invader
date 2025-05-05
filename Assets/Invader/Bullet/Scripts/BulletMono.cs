@@ -1,20 +1,22 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Invader.Bullet
 {
     public class BulletMono : MonoBehaviour
     {
-        public float speed = 10f;
-        private Transform target;
+        private float _speed = 10f;
+        private float _collisionRadius = 0.5f;
+        private IEnumerable<Transform> _targetTransforms;
 
-        public void SetTarget(Transform targetTransform)
+        public void SetTarget(IEnumerable<Transform> targetTransforms)
         {
-            target = targetTransform;
+            _targetTransforms = targetTransforms;
         }
 
-        public void Hit()
+        void Hit(Transform hitTransform)
         {
-            if (target.TryGetComponent<IOnHit>(out var hitComponent))
+            if (hitTransform.TryGetComponent<IOnHit>(out var hitComponent))
             {
                 hitComponent.OnHit();
             }
@@ -24,14 +26,17 @@ namespace Invader.Bullet
 
         void Update()
         {
-            transform.Translate(Vector3.up * speed * Time.deltaTime);
+            transform.Translate(Vector3.up * _speed * Time.deltaTime);
 
-            // 当たり判定（例: Raycastなど）でHit()を呼び出す処理を書くことが多いです
-        }
-
-        void OnTriggerEnter2D(Collider2D other)
-        {
-            Hit();  // コリジョンを使う場合
+            foreach (Transform targetTransform in _targetTransforms)
+            {
+                // 衝突半径以内にあれば衝突
+                if ((targetTransform.position - transform.position).sqrMagnitude < Mathf.Pow(_collisionRadius, 2))
+                {
+                    Hit(targetTransform);
+                    break;
+                }
+            }
         }
     }
 
