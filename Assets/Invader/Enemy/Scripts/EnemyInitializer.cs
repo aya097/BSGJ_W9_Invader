@@ -12,12 +12,14 @@ namespace Invader.Enemy
     {
         readonly EnemySpawner _enemySpawner;
         readonly EnemyMover _enemyMover;
+        readonly EnemyAttacker _enemyAttacker;
 
         [Inject]
-        public EnemyInitializer(EnemySpawner enemySpawner, EnemyMover enemyMover)
+        public EnemyInitializer(EnemySpawner enemySpawner, EnemyMover enemyMover, EnemyAttacker enemyAttacker)
         {
             _enemySpawner = enemySpawner;
             _enemyMover = enemyMover;
+            _enemyAttacker = enemyAttacker;
         }
 
         void IStartable.Start()
@@ -25,12 +27,20 @@ namespace Invader.Enemy
             // Enemy生成
             _enemySpawner.Spawn();
 
-            float deltaTime = 0.2f;
             // Enemy移動
-            Observable.Interval(TimeSpan.FromSeconds(deltaTime)).Subscribe(_ =>
+            float moveDeltaTime = 0.1f;
+            Observable.Interval(TimeSpan.FromSeconds(moveDeltaTime)).Subscribe(_ =>
             {
-                _enemyMover.Move(deltaTime);
+                _enemyMover.Move(moveDeltaTime);
             });
+
+            // Enemy攻撃
+            float attackDeltaTime = 1f;
+            Observable.Interval(TimeSpan.FromSeconds(attackDeltaTime)).Subscribe(_ =>
+            {
+                _enemyAttacker.Attack();
+            });
+
         }
     }
 }
