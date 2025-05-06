@@ -15,13 +15,15 @@ namespace Invader.Enemy
         readonly IEnemyCluster _enemyCluster;   // 作成したEnemyMonoを集約する
         readonly EnemyParamServer _enemyParamServer;
         readonly EnemyMono _enemyMonoPrefab;
+        readonly IObjectResolver _objectResolver;
 
         [Inject]
-        public EnemySpawner(EnemyParamServer enemyParamServer, EnemyMono enemyMonoPrefab, IEnemyCluster enemyCluster)
+        public EnemySpawner(EnemyParamServer enemyParamServer, EnemyMono enemyMonoPrefab, IEnemyCluster enemyCluster, IObjectResolver objectResolver)
         {
             _enemyParamServer = enemyParamServer;
             _enemyCluster = enemyCluster;
             _enemyMonoPrefab = enemyMonoPrefab;
+            _objectResolver = objectResolver;
         }
 
         public void Spawn()
@@ -42,7 +44,8 @@ namespace Invader.Enemy
         }
         void SpawnEnemy(EnemyMono enemyMonoPrefab, Vector2 position)
         {
-            var enemyObject = GameObject.Instantiate(enemyMonoPrefab, position, quaternion.identity);    // 引数の座標にEnemyを生成
+            // ObjectResolverにより生成すると自動的に依存が解決される
+            var enemyObject = _objectResolver.Instantiate(enemyMonoPrefab, position, quaternion.identity);    // 引数の座標にEnemyを生成
             IEnemyMono enemyMono = enemyObject.GetComponent<EnemyMono>();   // EnemyMonoをインタフェースで取得する
             _enemyCluster.AddEnemy(enemyMono);
         }

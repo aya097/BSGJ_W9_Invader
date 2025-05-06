@@ -2,6 +2,7 @@
 using System;
 using Invader.Bullet;
 using UnityEngine;
+using VContainer;
 
 namespace Invader.Enemy
 {
@@ -15,6 +16,17 @@ namespace Invader.Enemy
             get { return transform; }
         }
         public event EventHandler? OnDied;  // null許容
+
+        [Inject]
+        public void Initialize(IEnemyCluster enemyCluster)
+        {
+            OnDied += (enemy, arg) =>
+            {
+                enemyCluster.RemoveEnemy(this);
+                Destroy(gameObject);
+            };
+        }
+
 
         public Vector2 GetPosition()
         {
