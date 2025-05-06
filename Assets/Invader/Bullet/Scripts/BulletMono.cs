@@ -6,12 +6,17 @@ namespace Invader.Bullet
     public class BulletMono : MonoBehaviour
     {
         private float _speed = 10f;
+        private Vector2 _direction = Vector2.zero;
         private float _collisionRadius = 0.5f;
         private IEnumerable<Transform> _targetTransforms;
 
         public void SetTarget(IEnumerable<Transform> targetTransforms)
         {
             _targetTransforms = targetTransforms;
+        }
+        public void SetDirection(Vector2 direction)
+        {
+            _direction = direction.normalized;
         }
 
         void Hit(Transform hitTransform)
@@ -26,7 +31,7 @@ namespace Invader.Bullet
 
         void Update()
         {
-            transform.Translate(Vector3.up * _speed * Time.deltaTime);
+            transform.Translate(_direction * _speed * Time.deltaTime);
 
             foreach (Transform targetTransform in _targetTransforms)
             {

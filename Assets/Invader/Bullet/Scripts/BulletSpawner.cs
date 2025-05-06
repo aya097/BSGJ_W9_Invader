@@ -2,13 +2,15 @@ using UnityEngine;
 
 namespace Invader.Bullet
 {
-    public class BulletSpawner : MonoBehaviour, IBulletSpawner
+    public class BulletSpawner : IBulletSpawner
     {
-        public BulletMono bulletPrefab;
+        private BulletMono bulletPrefab;
 
-        public void Spawn()
+
+        public void Spawn(Vector2 position, Vector2 direction)
         {
-            Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+            var bulletMono = GameObject.Instantiate(bulletPrefab, position, Quaternion.identity);
+            bulletMono.SetDirection(direction);
         }
     }
 
