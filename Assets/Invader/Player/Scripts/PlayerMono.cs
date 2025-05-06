@@ -14,14 +14,18 @@ namespace Invader.Player
         private PlayerAttacker _playerAttacker = null!;
 
 
+
         [Header("PlayerMonoのパラメータ")]
         [SerializeField] int moveSpeed = 5;  // 移動速度
 
-
+        [Inject]
+        public void Initialize(PlayerAttacker playerAttacker)
+        {
+            _playerAttacker = playerAttacker;
+        }
         void Awake()
         {
             _playerMover = new PlayerMover(moveSpeed, transform);
-            _playerAttacker = new PlayerAttacker();
         }
 
         void Update()
@@ -31,6 +35,10 @@ namespace Invader.Player
             Vector3 moveDirection = new Vector3(horizontalInput, 0f, 0f).normalized;
             Move(moveDirection);
 
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Attack();
+            }
         }
 
         public void OnHit()
@@ -39,12 +47,12 @@ namespace Invader.Player
         }
 
 
-        public void Attack()
+        void Attack()
         {
-            _playerAttacker.Attack();  // PlayerMonoの攻撃を実行
+            _playerAttacker.Attack(transform.position);  // PlayerMonoの攻撃を実行
         }
 
-        public void Move(Vector3 direction)
+        void Move(Vector3 direction)
         {
             _playerMover.Move(direction);  // PlayerMonoの移動を実行
         }

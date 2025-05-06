@@ -24,6 +24,7 @@ namespace Invader.Game
             builder.RegisterInstance(_enemyMonoPrefab);
 
             // Player
+            builder.Register<Player.PlayerAttacker>(Lifetime.Scoped);
             builder.RegisterComponentInHierarchy<Player.PlayerMono>();
 
             // Bullet

@@ -8,8 +8,8 @@ namespace Invader.Player
     /// </summary>
     public class PlayerMover
     {
-        private readonly float _moveSpeed;  
-        private readonly Transform _playerTransform;  
+        private readonly float _moveSpeed;
+        private readonly Transform _playerTransform;
 
         public PlayerMover(float moveSpeed, Transform playerTransform)
         {
@@ -20,7 +20,7 @@ namespace Invader.Player
 
         public void Move(Vector3 direction)
         {
-            _playerTransform.Translate(direction * _moveSpeed * Time.deltaTime); 
+            _playerTransform.Translate(direction * _moveSpeed * Time.deltaTime);
         }
     }
 }

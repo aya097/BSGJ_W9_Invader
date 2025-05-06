@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Invader.Enemy;
@@ -23,17 +22,17 @@ namespace Invader.Bullet
     public class BulletSpawner : IBulletSpawner
     {
         readonly BulletMono _bulletPrefab;
-        readonly Dictionary<BulletTarget, IEnumerable<Transform>> _targetTransforms;
+        readonly IEnemyCluster _enemyCluster;
+        readonly IEnumerable<ShelterMono> _shelters;
+
+
 
         [Inject]
-        public BulletSpawner(BulletMono bulletMono, IEnemyCluster enemyCluster, IEnumerable<ShelterMono> shelters, PlayerMono player)
+        public BulletSpawner(BulletMono bulletMono, IEnemyCluster enemyCluster, IEnumerable<ShelterMono> shelters)
         {
             _bulletPrefab = bulletMono;
-
-            _targetTransforms.Add(BulletTarget.Enemy, enemyCluster.Enemies.Select(e => e.Transform));   // enemyの追加
-            _targetTransforms.Add(BulletTarget.Shelter, shelters.Select(s => s.transform)); // Shelterの追加
-            List<Transform> playerTransform = new() { player.transform };
-            _targetTransforms.Add(BulletTarget.Player, playerTransform);    // Playerの追加
+            _enemyCluster = enemyCluster;
+            _shelters = shelters;
         }
 
         public void Spawn(Vector2 position, Vector2 direction, BulletTarget bulletTarget)
@@ -44,15 +43,18 @@ namespace Invader.Bullet
             List<Transform> targetTransforms = new();
             if (HasState(bulletTarget, BulletTarget.Enemy))
             {
-                targetTransforms.AddRange(_targetTransforms[BulletTarget.Enemy]);
+                targetTransforms.AddRange(_enemyCluster.Enemies.Select(e => e.Transform));
             }
             if (HasState(bulletTarget, BulletTarget.Shelter))
             {
-                targetTransforms.AddRange(_targetTransforms[BulletTarget.Shelter]);
+                targetTransforms.AddRange(_shelters.Select(s => s.transform));
             }
             if (HasState(bulletTarget, BulletTarget.Player))
             {
-                targetTransforms.AddRange(_targetTransforms[BulletTarget.Player]);
+                var player = GameObject.FindObjectsByType<PlayerMono>(FindObjectsSortMode.None);
+
+                List<Transform> playerTransforms = new() { player.First().transform };
+                targetTransforms.AddRange(playerTransforms);
             }
 
             bulletMono.SetTarget(targetTransforms);
