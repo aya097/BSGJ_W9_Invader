@@ -1,7 +1,9 @@
 #nullable enable
 using System;
 using Invader.Bullet;
+using Invader.Score;
 using UnityEngine;
+using VContainer;
 
 namespace Invader.Enemy
 {
@@ -10,7 +12,23 @@ namespace Invader.Enemy
     /// </summary>
     public class EnemyMono : MonoBehaviour, IEnemyMono, IOnHit
     {
+        public Transform Transform
+        {
+            get { return transform; }
+        }
         public event EventHandler? OnDied;  // null許容
+
+        [Inject]
+        public void Initialize(IEnemyCluster enemyCluster, ScoreNumber scoreNumber)
+        {
+            OnDied += (enemy, arg) =>
+            {
+                scoreNumber.Increase(100);  // もっと汎用クラスにすべき
+                enemyCluster.RemoveEnemy(this);
+                Destroy(gameObject);
+            };
+        }
+
 
         public Vector2 GetPosition()
         {

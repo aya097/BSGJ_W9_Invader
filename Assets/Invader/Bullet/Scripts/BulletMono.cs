@@ -35,6 +35,7 @@ namespace Invader.Bullet
 
             foreach (Transform targetTransform in _targetTransforms)
             {
+                if (targetTransform == null) continue;
                 // 衝突半径以内にあれば衝突
                 if ((targetTransform.position - transform.position).sqrMagnitude < Mathf.Pow(_collisionRadius, 2))
                 {

@@ -2,6 +2,8 @@
 
 using Unity.Mathematics;
 using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 
 namespace Invader.Enemy
 {
@@ -12,16 +14,24 @@ namespace Invader.Enemy
     {
         readonly IEnemyCluster _enemyCluster;   // 作成したEnemyMonoを集約する
         readonly EnemyParamServer _enemyParamServer;
+        readonly EnemyMono _enemyMonoPrefab;
+        readonly IObjectResolver _objectResolver;
 
-
-        public EnemySpawner(EnemyParamServer enemyParamServer, GameObject enemyMonoPrefab, EnemyCluster enemyCluster)
+        [Inject]
+        public EnemySpawner(EnemyParamServer enemyParamServer, EnemyMono enemyMonoPrefab, IEnemyCluster enemyCluster, IObjectResolver objectResolver)
         {
             _enemyParamServer = enemyParamServer;
             _enemyCluster = enemyCluster;
-            SpawnEnemyArranged(enemyMonoPrefab, _enemyParamServer.GetLeftTop(), _enemyParamServer.GetRowNum(), _enemyParamServer.GetColumnNum(), _enemyParamServer.GetDistance());
+            _enemyMonoPrefab = enemyMonoPrefab;
+            _objectResolver = objectResolver;
         }
 
-        void SpawnEnemyArranged(GameObject enemyMonoPrefab, Vector2 leftTopPosition, int rowNum, int columnNum, Vector2 distance)
+        public void Spawn()
+        {
+            SpawnEnemyArranged(_enemyMonoPrefab, _enemyParamServer.GetLeftTop(), _enemyParamServer.GetRowNum(), _enemyParamServer.GetColumnNum(), _enemyParamServer.GetDistance());
+        }
+
+        void SpawnEnemyArranged(EnemyMono enemyMonoPrefab, Vector2 leftTopPosition, int rowNum, int columnNum, Vector2 distance)
         {
             for (int row = 0; row < rowNum; row++)  // 行繰り返し
             {
@@ -32,9 +42,10 @@ namespace Invader.Enemy
                 }
             }
         }
-        void SpawnEnemy(GameObject enemyMonoPrefab, Vector2 position)
+        void SpawnEnemy(EnemyMono enemyMonoPrefab, Vector2 position)
         {
-            var enemyObject = GameObject.Instantiate(enemyMonoPrefab, position, quaternion.identity);    // 引数の座標にEnemyを生成
+            // ObjectResolverにより生成すると自動的に依存が解決される
+            var enemyObject = _objectResolver.Instantiate(enemyMonoPrefab, position, quaternion.identity);    // 引数の座標にEnemyを生成
             IEnemyMono enemyMono = enemyObject.GetComponent<EnemyMono>();   // EnemyMonoをインタフェースで取得する
             _enemyCluster.AddEnemy(enemyMono);
         }

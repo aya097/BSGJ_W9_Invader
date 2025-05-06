@@ -1,17 +1,25 @@
 using UnityEngine;
+using TMPro;
 
 namespace Invader.Score
 {
+    using R3;
     using UnityEngine.UI;
+    using VContainer;
 
     public class ScoreViewMono : MonoBehaviour
     {
-        public Text scoreText;
-        public ScoreNumber score;
+        [SerializeField] TMP_Text scoreText;
 
-        void Update()
+        [Inject]
+        public void Initialize(ScoreNumber scoreNumber)
         {
-            scoreText.text = "Score: " + score.scoreNum;
+            Observable.EveryValueChanged(scoreNumber, s => s.ScoreNum)
+            .Subscribe(scoreNum =>
+            {
+                scoreText.text = "Score: " + scoreNum;
+
+            });
         }
     }
 

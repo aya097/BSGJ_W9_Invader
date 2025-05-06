@@ -5,7 +5,7 @@ namespace Invader.Bullet
 {
     public interface IBulletSpawner
     {
-        void Spawn(Vector2 position, Vector2 direction);
+        void Spawn(Vector2 position, Vector2 direction, BulletTarget bulletTarget);
     }
 
 }

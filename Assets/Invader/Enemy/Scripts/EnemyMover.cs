@@ -6,6 +6,7 @@ using System;
 using Unity.VisualScripting;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
+using VContainer;
 
 namespace Invader.Enemy
 {
@@ -48,7 +49,7 @@ namespace Invader.Enemy
     /// </summary>
     public class EnemyMover
     {
-        const float _speed = 3;
+        const float _speed = 1;
         const float _movingForwardAmount = 0.5f;
 
         private EnemyMoveState _currentMoveState;   // 現在の移動状態
@@ -58,6 +59,7 @@ namespace Invader.Enemy
         readonly IEnemyCluster _enemyCluster;
         readonly EnemiesPosition _enemiesPosition;
 
+        [Inject]
         public EnemyMover(IEnemyCluster enemyCluster)
         {
             _currentMoveState = EnemyMoveState.Right;    // 最初は右移動

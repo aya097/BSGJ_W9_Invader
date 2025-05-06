@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Linq;
 using Invader.Bullet;
+using VContainer;
 
 namespace Invader.Enemy
 {
@@ -11,6 +12,7 @@ namespace Invader.Enemy
         readonly IEnemyCluster _enemyCluster;
         readonly IBulletSpawner _bulletSpawner;
 
+        [Inject]
         public EnemyAttacker(IEnemyCluster enemyCluster, IBulletSpawner bulletSpawner)
         {
             _enemyCluster = enemyCluster;
@@ -22,7 +24,8 @@ namespace Invader.Enemy
             var enemies = _enemyCluster.Enemies;
             int randomIndex = Random.Range(0, enemies.Count());
             var position = enemies.ElementAt(randomIndex).GetPosition();    // ランダムなEnemyの座標を取得
-            // _bulletSpawner.Spawn();
+            var target = BulletTarget.Shelter | BulletTarget.Player;
+            _bulletSpawner.Spawn(position, Vector2.down, target);
         }
     }
 }
