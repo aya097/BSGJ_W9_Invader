@@ -47,7 +47,7 @@ namespace Invader.Bullet
             }
             if (HasState(bulletTarget, BulletTarget.Shelter))
             {
-                targetTransforms.AddRange(_shelters.Select(s => s.transform));
+                targetTransforms.AddRange(_shelters.Where(s => s != null).Select(s => s.transform));
             }
             if (HasState(bulletTarget, BulletTarget.Player))
             {
