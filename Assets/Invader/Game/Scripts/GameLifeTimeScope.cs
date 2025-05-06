@@ -35,6 +35,10 @@ namespace Invader.Game
             var shelters = FindObjectsByType<Shelter.ShelterMono>(FindObjectsSortMode.None);
             builder.RegisterInstance<IEnumerable<Shelter.ShelterMono>>(shelters);
 
+            // Score
+            builder.Register<Score.ScoreNumber>(Lifetime.Scoped);
+            builder.RegisterComponentInHierarchy<Score.ScoreViewMono>();
+
 
             // EntryPoint
             builder.RegisterEntryPoint<Enemy.EnemyInitializer>();
