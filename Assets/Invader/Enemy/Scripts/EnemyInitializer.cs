@@ -2,6 +2,9 @@
 
 using VContainer;
 using VContainer.Unity;
+using R3;
+using System.Threading;
+using System;
 
 namespace Invader.Enemy
 {
@@ -19,7 +22,15 @@ namespace Invader.Enemy
 
         void IStartable.Start()
         {
+            // Enemy生成
             _enemySpawner.Spawn();
+
+            float deltaTime = 0.2f;
+            // Enemy移動
+            Observable.Interval(TimeSpan.FromSeconds(deltaTime)).Subscribe(_ =>
+            {
+                _enemyMover.Move(deltaTime);
+            });
         }
     }
 }
