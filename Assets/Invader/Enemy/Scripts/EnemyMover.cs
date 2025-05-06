@@ -49,7 +49,7 @@ namespace Invader.Enemy
     /// </summary>
     public class EnemyMover
     {
-        const float _speed = 3;
+        const float _speed = 1;
         const float _movingForwardAmount = 0.5f;
 
         private EnemyMoveState _currentMoveState;   // 現在の移動状態
