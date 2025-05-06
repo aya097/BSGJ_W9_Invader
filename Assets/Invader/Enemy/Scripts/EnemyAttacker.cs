@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Linq;
 using Invader.Bullet;
+using VContainer;
 
 namespace Invader.Enemy
 {
@@ -11,6 +12,7 @@ namespace Invader.Enemy
         readonly IEnemyCluster _enemyCluster;
         readonly IBulletSpawner _bulletSpawner;
 
+        [Inject]
         public EnemyAttacker(IEnemyCluster enemyCluster, IBulletSpawner bulletSpawner)
         {
             _enemyCluster = enemyCluster;

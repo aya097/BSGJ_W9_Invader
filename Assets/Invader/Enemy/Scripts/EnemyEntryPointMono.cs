@@ -8,7 +8,7 @@ namespace Invader.Enemy
     /// </summary>
     public class EnemyEntryPointMono : MonoBehaviour
     {
-        [SerializeField] GameObject enemyMonoPrefab = null!;
+        [SerializeField] EnemyMono enemyMonoPrefab = null!;
         [SerializeField] EnemySpawnerParam enemySpawnerParam = null!;
 
         private EnemySpawner _enemySpawner = null!;

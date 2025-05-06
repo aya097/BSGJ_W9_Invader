@@ -1,6 +1,7 @@
 # nullable enable
 using UnityEngine;
 using Invader.Bullet;
+using VContainer;
 
 namespace Invader.Player
 {
@@ -19,10 +20,10 @@ namespace Invader.Player
 
         void Awake()
         {
-
             _playerMover = new PlayerMover(moveSpeed, transform);
             _playerAttacker = new PlayerAttacker();
         }
+
         void Update()
         {
             // 左右の入力を取得

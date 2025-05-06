@@ -6,6 +6,7 @@ using System;
 using Unity.VisualScripting;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
+using VContainer;
 
 namespace Invader.Enemy
 {
@@ -58,6 +59,7 @@ namespace Invader.Enemy
         readonly IEnemyCluster _enemyCluster;
         readonly EnemiesPosition _enemiesPosition;
 
+        [Inject]
         public EnemyMover(IEnemyCluster enemyCluster)
         {
             _currentMoveState = EnemyMoveState.Right;    // 最初は右移動
