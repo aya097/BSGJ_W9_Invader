@@ -22,7 +22,7 @@ namespace Invader.Enemy
             var enemies = _enemyCluster.Enemies;
             int randomIndex = Random.Range(0, enemies.Count());
             var position = enemies.ElementAt(randomIndex).GetPosition();    // ランダムなEnemyの座標を取得
-            _bulletSpawner.Spawn();
+            // _bulletSpawner.Spawn();
         }
     }
 }

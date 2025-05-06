@@ -9,15 +9,9 @@ namespace Invader.Player
     /// </summary>
     public class PlayerAttacker
     {
-        public void Attack(BulletSpawner bulletSpawner)//()の中を追加
+        public void Attack()
         {
-            if (bulletSpawner != null)//追加
-            {
-                bulletSpawner.Spawn();
 
-            }//追加
-
-            Debug.Log("Player is attacking!");  // 仮の攻撃処理
         }
     }
 }
