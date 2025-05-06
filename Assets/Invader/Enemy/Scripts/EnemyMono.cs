@@ -10,6 +10,10 @@ namespace Invader.Enemy
     /// </summary>
     public class EnemyMono : MonoBehaviour, IEnemyMono, IOnHit
     {
+        public Transform Transform
+        {
+            get { return transform; }
+        }
         public event EventHandler? OnDied;  // null許容
 
         public Vector2 GetPosition()
